@@ -15,5 +15,5 @@ all: $(TARGET).elf
 
 .PHONY: clean
 clean:
-	rm -rf *.elf *.o
+	rm -rf *.elf *.o *.map
 
