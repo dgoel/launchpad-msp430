@@ -5,10 +5,12 @@ all: liblaunchpad-msp430.a
 
 OBJFILES = init.o \
 	gpio.o \
-	led.o
+	led.o \
+	button.o \
+	interrupt.o
 
 %.a: $(OBJFILES)
-	$(COMPILER_PREFIX)-ar ruvcs $@ $^
+	$(COMPILER_PREFIX)-ar rvs $@ $^
 
 %.o: %.c
 	$(COMPILER_PREFIX)-gcc $(CFLAGS) -c $<
