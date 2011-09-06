@@ -42,6 +42,10 @@ typedef void (*irq_handler_f)(void);
 
 void irq_configure(IRQSource irq, int edge);
 
+void irq_enable(IRQSource irq);
+
+void irq_disable(IRQSource irq);
+
 void interrupt_set_handler(IRQSource irq, irq_handler_f handler); 
 
 

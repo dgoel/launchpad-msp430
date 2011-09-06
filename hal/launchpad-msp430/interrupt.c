@@ -6,7 +6,7 @@
 
 static irq_handler_f irq_handlers[IRQ_NUM_SOURCES];
 
-void stub_irq_handler(void)
+static void stub_irq_handler(void)
 {
 }
 
@@ -58,9 +58,15 @@ void interrupt_set_handler(IRQSource irq, irq_handler_f handler)
     irq_handlers[irq] = handler;
 }
 
-void irq_configure(IRQSource irq, int edge)
+typedef enum
 {
-    // TODO: enable the corresponding interrupt
+    IRQ_ENABLE,
+    IRQ_CONFIG,
+    IRQ_DISABLE
+} IRQConfig;
+
+static void config_irq(IRQSource irq, IRQConfig conf, int edge)
+{
     switch (irq)
     {
     case IRQ_GPIO_PORT1_0:
@@ -71,8 +77,11 @@ void irq_configure(IRQSource irq, int edge)
     case IRQ_GPIO_PORT1_5:
     case IRQ_GPIO_PORT1_6:
     case IRQ_GPIO_PORT1_7:
-        P1IE |= (1 << (irq - IRQ_GPIO_PORT1_0));
-        if (edge) {
+        if (conf == IRQ_DISABLE) {
+            P1IE &= ~(1 << (irq - IRQ_GPIO_PORT1_0));
+        } else if (conf == IRQ_ENABLE) {
+            P1IE |= (1 << (irq - IRQ_GPIO_PORT1_0));
+        } else if ((conf == IRQ_CONFIG) && edge) {
             P1IES |= (1 << (irq - IRQ_GPIO_PORT1_0));
         }
         break;
@@ -85,8 +94,11 @@ void irq_configure(IRQSource irq, int edge)
     case IRQ_GPIO_PORT2_5:
     case IRQ_GPIO_PORT2_6:
     case IRQ_GPIO_PORT2_7:
-        P2IE |= (1 << (irq - IRQ_GPIO_PORT2_0));
-        if (edge) {
+        if (conf == IRQ_DISABLE) {
+            P2IE &= ~(1 << (irq - IRQ_GPIO_PORT2_0));
+        } else if (conf == IRQ_ENABLE) {
+            P2IE |= (1 << (irq - IRQ_GPIO_PORT2_0));
+        } else if ((conf == IRQ_CONFIG) && edge) {
             P2IES |= (1 << (irq - IRQ_GPIO_PORT2_0));
         }
         break;
@@ -98,3 +110,19 @@ void irq_configure(IRQSource irq, int edge)
 
     }
 }
+
+void irq_configure(IRQSource irq, int edge)
+{
+    config_irq(irq, IRQ_CONFIG, edge);
+}
+
+void irq_enable(IRQSource irq)
+{
+    config_irq(irq, IRQ_ENABLE, 0 /*unused*/);
+}
+
+void irq_disable(IRQSource irq)
+{
+    config_irq(irq, IRQ_DISABLE, 0 /*unused*/);
+}
+
