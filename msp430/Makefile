@@ -7,7 +7,8 @@ OBJFILES = init.o \
 	gpio.o \
 	led.o \
 	button.o \
-	interrupt.o
+	interrupt.o \
+	timer.o
 
 %.a: $(OBJFILES)
 	$(COMPILER_PREFIX)-ar rvs $@ $^

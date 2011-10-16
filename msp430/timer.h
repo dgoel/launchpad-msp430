@@ -12,7 +12,7 @@ typedef enum {
     TIMER_COUNT_UP,
     TIMER_COUNT_CONTINUOUS,
     TIMER_COUNT_UP_DOWN
-} TimerAMode;
+} TimerMode;
 
 typedef enum {
     TIMER_SRC_TACLK,
@@ -28,17 +28,18 @@ typedef enum {
     TIMER_DIV_8
 } TimerClkDivider;
 
-typedef (*timer_match_callback_f)(void);
+typedef void (*timer_match_callback_f)(void);
 
-void timer_init(TimerType which,
+void timer_init(TimerNum which,
                 TimerClkSrc src,
-                TimerClkDivider div);
+                TimerClkDivider div,
+                TimerMode mode);
 
-void timer_match_enable(TimerType which,
+void timer_match_enable(TimerNum which,
                         unsigned int val,
                         timer_match_callback_f func);
 
-void timer_enable(TimerType which);
-void timer_disable(TimerType which);
+void timer_enable(TimerNum which);
+void timer_disable(TimerNum which);
 
 #endif // __MSP430_TIMER_H__
