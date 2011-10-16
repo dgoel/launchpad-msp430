@@ -1,7 +1,6 @@
 
 #include <button.h>
 #include <gpio.h>
-//#include <io.h>
 #include "launchpad-msp430.h"
 
 void button_init(void)
